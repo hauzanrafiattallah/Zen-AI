@@ -1,10 +1,11 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Upload } from "lucide-react";
+import { FileIcon, Upload, X } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { FileWithPreview } from "../../types/file";
+import { Button } from "./ui/button";
 import {
   Card,
   CardContent,
@@ -107,6 +108,16 @@ const FileUpload = (props: PropTypes) => {
     [files, maxFiles, onChange]
   );
 
+  const handleRemove = useCallback(
+    (fileToRemove: FileWithPreview) => {
+      const updatedFiles = files.filter((f) => f.file !== fileToRemove.file);
+      setFiles(updatedFiles);
+      onChange?.(updatedFiles);
+      onRemove?.(fileToRemove);
+    },
+    [files, onChange, onRemove]
+  );
+
   const {
     getRootProps,
     getInputProps,
@@ -135,7 +146,7 @@ const FileUpload = (props: PropTypes) => {
           <div
             {...getRootProps()}
             className={cn(
-              "relative flex flex-col items-center justify-center w-full h-32 p-4 border-2 border-dashed rounded-lg transition-colors",
+              "relative flex flex-col items-center justify-center w-full h-32 p-4 border-2 border-dashed rounded-lg transition-colors cursor-pointer",
               isDragActive
                 ? "border-primary bg-primary/5"
                 : "border-muted-foreground/25 ",
@@ -151,6 +162,43 @@ const FileUpload = (props: PropTypes) => {
               </p>
             </div>
           </div>
+
+          {files.length > 0 && (
+            <div className="space-y-2">
+              {files.map((file, index) => (
+                <div
+                  key={`${file.file.name}-${index}`}
+                  className="flex items-center p-2 border rounded-lg"
+                >
+                  <div className="flex items-center flex-1 min-w-0 gap-2">
+                    {file.preview ? (
+                      <div className="relative size-10 overflow-hidden rounded">
+                        <img
+                          src={file.preview}
+                          alt={file.file.name}
+                          className="object-cover w-full h-full"
+                        />
+                      </div>
+                    ) : (
+                      <div>
+                        <FileIcon className="size-6" />
+                      </div>
+                    )}
+                  </div>
+
+                  <Button
+                    variant={"ghost"}
+                    size={"icon"}
+                    className="ml-2 size-8 cursor-pointer"
+                    onClick={() => handleRemove(file)}
+                    disabled={disabled}
+                  >
+                    <X />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

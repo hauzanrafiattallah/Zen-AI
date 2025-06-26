@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { toast } from "sonner";
 import { FileWithPreview } from "../../types/file";
 import FileUpload from "./FileUpload";
 
@@ -10,9 +9,7 @@ const FileUploadContainer = () => {
   const handleChange = (newFiles: FileWithPreview[]) => {
     setFiles(newFiles);
   };
-  const handleRemove = (file: FileWithPreview) => {
-    toast;
-  };
+  const handleRemove = (file: FileWithPreview) => {};
 
   return (
     <div className="w-full ">
