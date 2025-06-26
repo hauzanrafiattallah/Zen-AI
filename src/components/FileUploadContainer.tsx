@@ -9,14 +9,12 @@ const FileUploadContainer = () => {
   const handleChange = (newFiles: FileWithPreview[]) => {
     setFiles(newFiles);
   };
-  const handleRemove = (file: FileWithPreview) => {};
 
   return (
     <div className="w-full ">
       <FileUpload
         value={files}
         onChange={handleChange}
-        onRemove={handleRemove}
         maxFiles={1}
         maxSize={20} // 20 MB
         accept={{

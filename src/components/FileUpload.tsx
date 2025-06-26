@@ -1,5 +1,6 @@
 "use client";
 
+import { getAiResult } from "@/actions/getAiResult";
 import { cn } from "@/lib/utils";
 import { FileIcon, Loader2Icon, Upload, X } from "lucide-react";
 import { useCallback, useState } from "react";
@@ -41,7 +42,6 @@ const FileUpload = (props: PropTypes) => {
       "application/pdf": [".pdf"],
     },
     disabled = false,
-    className,
   } = props;
 
   const [files, setFiles] = useState<FileWithPreview[]>(value);
@@ -124,15 +124,18 @@ const FileUpload = (props: PropTypes) => {
 
   const onSubmit = async () => {
     setIsLoading(true);
-  }
+    const result = await getAiResult(prompt, files[0].file);
+    setAiResult(result);
+    setIsLoading(false);
+  };
 
-  const {
-    getRootProps,
-    getInputProps,
-    isDragActive,
-    isDragReject,
-    fileRejections,
-  } = useDropzone({
+  const handleClose = () => {
+    setPrompt("");
+    setAiResult("");
+    setFiles([]);
+  };
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept,
     maxSize: maxSize * 1024 * 1024, // Convert MB to bytes
@@ -142,7 +145,19 @@ const FileUpload = (props: PropTypes) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <Textarea rows={10} onChange={() => {}} />
+      {aiResult && (
+        <div>
+          <p>{aiResult}</p>
+          <Button onClick={handleClose} className="mt-2">
+            Close
+          </Button>
+        </div>
+      )}
+      <Textarea
+        rows={10}
+        value={prompt}
+        onChange={(e) => setPrompt(e.target.value)}
+      />
       <Card>
         <CardHeader>
           <CardTitle>File Upload</CardTitle>
