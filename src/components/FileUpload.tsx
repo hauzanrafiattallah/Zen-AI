@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { FileIcon, Upload, X } from "lucide-react";
+import { FileIcon, Loader2Icon, Upload, X } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { FileWithPreview } from "../types/file";
@@ -10,6 +10,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "./ui/card";
@@ -44,6 +45,9 @@ const FileUpload = (props: PropTypes) => {
   } = props;
 
   const [files, setFiles] = useState<FileWithPreview[]>(value);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [prompt, setPrompt] = useState<string>("");
+  const [aiResult, setAiResult] = useState<string>("");
 
   const createFilePreview = (file: File): Promise<string | null> => {
     return new Promise((resolve) => {
@@ -117,6 +121,10 @@ const FileUpload = (props: PropTypes) => {
     },
     [files, onChange, onRemove]
   );
+
+  const onSubmit = async () => {
+    setIsLoading(true);
+  }
 
   const {
     getRootProps,
@@ -200,6 +208,29 @@ const FileUpload = (props: PropTypes) => {
             </div>
           )}
         </CardContent>
+
+        <CardFooter>
+          <div className="flex w-full justify-between">
+            <p className="text-xs text-muted-foreground">
+              {`${
+                files.filter((f) => !f.error).length
+              }/${maxFiles} files uploaded`}
+            </p>
+            <div>
+              <Button
+                disabled={isLoading}
+                onClick={onSubmit}
+                className="cursor-pointer"
+              >
+                {isLoading ? (
+                  <Loader2Icon className="size-4 animate-spin" />
+                ) : (
+                  "Submit"
+                )}
+              </Button>
+            </div>
+          </div>
+        </CardFooter>
       </Card>
     </div>
   );
