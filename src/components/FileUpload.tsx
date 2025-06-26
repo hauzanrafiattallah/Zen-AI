@@ -83,7 +83,7 @@ const FileUpload = (props: PropTypes) => {
           )
         );
       }
-    }, 100); // Menambahkan interval delay (100ms)
+    }, 100);
   };
 
   const onDrop = useCallback(
@@ -91,7 +91,7 @@ const FileUpload = (props: PropTypes) => {
       const newFiles: FileWithPreview[] = [];
       for (const file of acceptedFiles) {
         if (files.length + newFiles.length > maxFiles) {
-          break; // Stop if max files limit is reached
+          break;
         }
 
         const preview = await createFilePreview(file);
@@ -138,64 +138,105 @@ const FileUpload = (props: PropTypes) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept,
-    maxSize: maxSize * 1024 * 1024, // Convert MB to bytes
+    maxSize: maxSize * 1024 * 1024,
     multiple: true,
     disabled: disabled || files.length >= maxFiles,
   });
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 w-full px-4 sm:px-0">
+      {/* AI Result Section - Mobile Optimized */}
       {aiResult && (
-        <div>
-          <p>{aiResult}</p>
-          <Button onClick={handleClose} className="mt-2">
+        <div className="p-4 sm:p-6 bg-muted rounded-lg">
+          <div className="prose prose-sm max-w-none break-words">
+            <p className="text-sm sm:text-base leading-relaxed">{aiResult}</p>
+          </div>
+          <Button
+            onClick={handleClose}
+            className="mt-4 w-full sm:w-auto cursor-pointer"
+            size="sm"
+          >
             Close
           </Button>
         </div>
       )}
+
+      {/* Textarea - Mobile Optimized */}
       <Textarea
-        rows={10}
+        rows={6}
         value={prompt}
         onChange={(e) => setPrompt(e.target.value)}
+        placeholder="Enter your prompt here..."
+        className="min-h-[120px] sm:min-h-[150px] text-sm sm:text-base resize-none"
       />
-      <Card>
-        <CardHeader>
-          <CardTitle>File Upload</CardTitle>
-          <CardDescription>
+
+      {/* File Upload Card - Mobile Optimized */}
+      <Card className="w-full">
+        <CardHeader className="pb-4 sm:pb-6">
+          <CardTitle className="text-lg sm:text-xl">File Upload</CardTitle>
+          <CardDescription className="text-sm sm:text-base">
             Drag and drop files here or click to select files.
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+
+        <CardContent className="space-y-4 px-4 sm:px-6">
+          {/* Drop Zone - Mobile Optimized */}
           <div
             {...getRootProps()}
             className={cn(
-              "relative flex flex-col items-center justify-center w-full h-32 p-4 border-2 border-dashed rounded-lg transition-colors cursor-pointer",
-              isDragActive
+              "relative flex flex-col items-center justify-center w-full p-4 sm:p-6 border-2 border-dashed rounded-lg transition-colors",
+              "min-h-[120px] sm:min-h-[140px]", // Responsive height
+              isDragActive && files.length < maxFiles
                 ? "border-primary bg-primary/5"
-                : "border-muted-foreground/25 ",
-              disabled && "opacity-50 cursor-not-allowed",
-              "hover:bg-muted/50"
+                : "border-muted-foreground/25",
+              disabled || files.length >= maxFiles
+                ? "opacity-50 cursor-not-allowed"
+                : "cursor-pointer hover:bg-muted/50 active:bg-muted/70"
             )}
           >
-            <input {...getInputProps()} />
-            <div className="flex flex-col items-center justify-center text-center gap-2">
-              <Upload className="size-6" />
-              <p className="text-sm font-medium">
-                Drag and drop files here, or click to select files.
-              </p>
+            <input
+              {...getInputProps()}
+              disabled={disabled || files.length >= maxFiles}
+            />
+            <div className="flex flex-col items-center justify-center text-center gap-2 sm:gap-3">
+              <Upload
+                className={cn(
+                  "size-5 sm:size-6",
+                  files.length >= maxFiles
+                    ? "text-muted-foreground/50"
+                    : "text-muted-foreground"
+                )}
+              />
+              <div className="space-y-1">
+                <p
+                  className={cn(
+                    "text-xs sm:text-sm font-medium px-2",
+                    files.length >= maxFiles ? "text-muted-foreground/50" : ""
+                  )}
+                >
+                  {files.length >= maxFiles
+                    ? "Maximum files reached"
+                    : "Drag and drop files here, or tap to select files."}
+                </p>
+                <p className="text-xs text-muted-foreground hidden sm:block">
+                  Maximum {maxFiles} file(s), up to {maxSize}MB each
+                </p>
+              </div>
             </div>
           </div>
 
+          {/* File List - Mobile Optimized */}
           {files.length > 0 && (
-            <div className="space-y-2">
+            <div className="space-y-2 sm:space-y-3">
               {files.map((file, index) => (
                 <div
                   key={`${file.file.name}-${index}`}
-                  className="flex items-center p-2 border rounded-lg"
+                  className="flex items-center p-3 sm:p-4 border rounded-lg bg-background/50"
                 >
-                  <div className="flex items-center flex-1 min-w-0 gap-2">
+                  <div className="flex items-center flex-1 min-w-0 gap-2 sm:gap-3">
+                    {/* File Preview/Icon */}
                     {file.preview ? (
-                      <div className="relative size-10 overflow-hidden rounded">
+                      <div className="relative size-10 sm:size-12 overflow-hidden rounded flex-shrink-0">
                         <img
                           src={file.preview}
                           alt={file.file.name}
@@ -203,20 +244,43 @@ const FileUpload = (props: PropTypes) => {
                         />
                       </div>
                     ) : (
-                      <div>
-                        <FileIcon className="size-6" />
+                      <div className="flex-shrink-0">
+                        <FileIcon className="size-8 sm:size-10 text-muted-foreground" />
                       </div>
                     )}
+
+                    {/* File Info */}
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm sm:text-base font-medium truncate">
+                        {file.file.name}
+                      </p>
+                      <p className="text-xs sm:text-sm text-muted-foreground">
+                        {(file.file.size / 1024 / 1024).toFixed(2)} MB
+                      </p>
+
+                      {/* Progress Bar */}
+                      {file.progress !== undefined && file.progress < 100 && (
+                        <div className="mt-2">
+                          <div className="w-full bg-muted rounded-full h-1.5 sm:h-2">
+                            <div
+                              className="bg-primary h-1.5 sm:h-2 rounded-full transition-all duration-300"
+                              style={{ width: `${file.progress}%` }}
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
+                  {/* Remove Button */}
                   <Button
-                    variant={"ghost"}
-                    size={"icon"}
-                    className="ml-2 size-8 cursor-pointer"
+                    variant="ghost"
+                    size="sm"
+                    className="ml-2 size-8 sm:size-9 flex-shrink-0"
                     onClick={() => handleRemove(file)}
                     disabled={disabled}
                   >
-                    <X />
+                    <X className="size-4" />
                   </Button>
                 </div>
               ))}
@@ -224,27 +288,29 @@ const FileUpload = (props: PropTypes) => {
           )}
         </CardContent>
 
-        <CardFooter>
-          <div className="flex w-full justify-between">
-            <p className="text-xs text-muted-foreground">
-              {`${
-                files.filter((f) => !f.error).length
-              }/${maxFiles} files uploaded`}
-            </p>
-            <div>
-              <Button
-                disabled={isLoading}
-                onClick={onSubmit}
-                className="cursor-pointer"
-              >
-                {isLoading ? (
-                  <Loader2Icon className="size-4 animate-spin" />
-                ) : (
-                  "Submit"
-                )}
-              </Button>
-            </div>
-          </div>
+        {/* Footer - Mobile Optimized */}
+        <CardFooter className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 pt-4 px-4 sm:px-6">
+          <p className="text-xs sm:text-sm text-muted-foreground order-2 sm:order-1 text-center sm:text-left">
+            {`${
+              files.filter((f) => !f.error).length
+            }/${maxFiles} files uploaded`}
+          </p>
+
+          <Button
+            disabled={isLoading || files.length === 0}
+            onClick={onSubmit}
+            className="w-full sm:w-auto order-1 sm:order-2 min-w-[100px] cursor-pointer"
+            size="sm"
+          >
+            {isLoading ? (
+              <>
+                <Loader2Icon className="size-4 animate-spin mr-2" />
+                Processing...
+              </>
+            ) : (
+              "Submit"
+            )}
+          </Button>
         </CardFooter>
       </Card>
     </div>

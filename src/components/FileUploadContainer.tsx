@@ -11,7 +11,7 @@ const FileUploadContainer = () => {
   };
 
   return (
-    <div className="w-full ">
+    <div className="w-full">
       <FileUpload
         value={files}
         onChange={handleChange}
