@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { FileIcon, Upload, X } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { FileWithPreview } from "../../types/file";
+import { FileWithPreview } from "../types/file";
 import { Button } from "./ui/button";
 import {
   Card,

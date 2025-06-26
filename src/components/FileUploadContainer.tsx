@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FileWithPreview } from "../../types/file";
+import { FileWithPreview } from "../types/file";
 import FileUpload from "./FileUpload";
 
 const FileUploadContainer = () => {
