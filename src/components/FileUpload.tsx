@@ -145,7 +145,7 @@ const FileUpload = (props: PropTypes) => {
 
   return (
     <div className="flex flex-col gap-4 w-full px-4 sm:px-0">
-      {/* AI Result Section - Mobile Optimized */}
+      {/* AI Result Section*/}
       {aiResult && (
         <div className="p-4 sm:p-6 bg-muted rounded-lg">
           <div className="prose prose-sm max-w-none break-words">
@@ -161,7 +161,7 @@ const FileUpload = (props: PropTypes) => {
         </div>
       )}
 
-      {/* Textarea - Mobile Optimized */}
+      {/* Textarea */}
       <Textarea
         rows={6}
         value={prompt}
@@ -170,7 +170,7 @@ const FileUpload = (props: PropTypes) => {
         className="min-h-[120px] sm:min-h-[150px] text-sm sm:text-base resize-none"
       />
 
-      {/* File Upload Card - Mobile Optimized */}
+      {/* File Upload Card*/}
       <Card className="w-full">
         <CardHeader className="pb-4 sm:pb-6">
           <CardTitle className="text-lg sm:text-xl">File Upload</CardTitle>
@@ -180,7 +180,7 @@ const FileUpload = (props: PropTypes) => {
         </CardHeader>
 
         <CardContent className="space-y-4 px-4 sm:px-6">
-          {/* Drop Zone - Mobile Optimized */}
+          {/* Drop Zone */}
           <div
             {...getRootProps()}
             className={cn(
@@ -225,7 +225,7 @@ const FileUpload = (props: PropTypes) => {
             </div>
           </div>
 
-          {/* File List - Mobile Optimized */}
+          {/* File List */}
           {files.length > 0 && (
             <div className="space-y-2 sm:space-y-3">
               {files.map((file, index) => (
@@ -288,7 +288,7 @@ const FileUpload = (props: PropTypes) => {
           )}
         </CardContent>
 
-        {/* Footer - Mobile Optimized */}
+        {/* Footer */}
         <CardFooter className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 pt-4 px-4 sm:px-6">
           <p className="text-xs sm:text-sm text-muted-foreground order-2 sm:order-1 text-center sm:text-left">
             {`${
