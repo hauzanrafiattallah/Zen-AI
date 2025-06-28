@@ -1,7 +1,7 @@
 import { getAiResult } from "@/actions/getAiResult";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { FileWithPreview } from "../types/file";
+import { FileWithPreview } from "../../types/file";
 
 interface UseFileUploadProps {
   maxFiles?: number;
@@ -17,7 +17,7 @@ interface UseFileUploadProps {
 
 export const useFileUpload = ({
   maxFiles = 1,
-  maxSize = 1, // Changed from 20 to 1 MB
+  maxSize = 1,
   accept = {
     "image/*": [".jpeg", ".jpg", ".png", ".gif", ".webp"],
     "application/pdf": [".pdf"],
@@ -42,7 +42,7 @@ export const useFileUpload = ({
           };
           reader.readAsDataURL(file);
         } else {
-          resolve(null); // No preview for non-image files
+          resolve(null);
         }
       });
     },
@@ -118,7 +118,6 @@ export const useFileUpload = ({
       setAiResult(result);
     } catch (error) {
       console.error("Error getting AI result:", error);
-      // Handle error appropriately
     } finally {
       setIsLoading(false);
     }
@@ -154,7 +153,7 @@ export const useFileUpload = ({
     prompt,
     aiResult,
     isDragActive,
-    isUploading, // Added this to track upload progress
+    isUploading,
 
     // Handlers
     handleRemove,
@@ -169,6 +168,6 @@ export const useFileUpload = ({
     // Computed values
     canUpload: !disabled && files.length < maxFiles,
     uploadedCount: files.filter((f) => !f.error).length,
-    canSubmit: !isLoading && files.length > 0 && !isUploading, // Updated to include isUploading check
+    canSubmit: !isLoading && files.length > 0 && !isUploading,
   };
 };

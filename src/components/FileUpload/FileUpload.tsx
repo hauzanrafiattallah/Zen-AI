@@ -2,8 +2,8 @@
 
 import { cn } from "@/lib/utils";
 import { FileIcon, Loader2Icon, Upload, X } from "lucide-react";
-import { FileWithPreview } from "../types/file";
-import { Button } from "./ui/button";
+import { FileWithPreview } from "../../types/file";
+import { Button } from "../ui/button";
 import {
   Card,
   CardContent,
@@ -11,8 +11,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "./ui/card";
-import { Textarea } from "./ui/textarea";
+} from "../ui/card";
+import { Textarea } from "../ui/textarea";
 import { useFileUpload } from "./useFileUpload";
 
 interface PropTypes {
@@ -34,7 +34,7 @@ const FileUpload = (props: PropTypes) => {
     onChange,
     onRemove,
     maxFiles = 1,
-    maxSize = 1, // Changed from 20 to 1 MB
+    maxSize = 1,
     accept = {
       "image/*": [".jpeg", ".jpg", ".png", ".gif", ".webp"],
       "application/pdf": [".pdf"],
@@ -48,7 +48,7 @@ const FileUpload = (props: PropTypes) => {
     prompt,
     aiResult,
     isDragActive,
-    isUploading, // Added this from the hook
+    isUploading,
     handleRemove,
     handleSubmit,
     handleClose,
@@ -110,7 +110,7 @@ const FileUpload = (props: PropTypes) => {
             {...getRootProps()}
             className={cn(
               "relative flex flex-col items-center justify-center w-full p-4 sm:p-6 border-2 border-dashed rounded-lg transition-colors",
-              "min-h-[120px] sm:min-h-[140px]", // Responsive height
+              "min-h-[120px] sm:min-h-[140px]",
               isDragActive && canUpload
                 ? "border-primary bg-primary/5"
                 : "border-muted-foreground/25",
@@ -200,7 +200,7 @@ const FileUpload = (props: PropTypes) => {
                     size="sm"
                     className="ml-2 size-8 sm:size-9 flex-shrink-0"
                     onClick={() => handleRemove(file)}
-                    disabled={disabled || isUploading} // Disabled during upload
+                    disabled={disabled || isUploading}
                   >
                     <X className="size-4" />
                   </Button>

@@ -1,4 +1,4 @@
-import FileUploadContainer from "@/components/FileUploadContainer";
+import FileUploadContainer from "@/components/FileUpload/FileUploadContainer";
 
 export default function Home() {
   return (
