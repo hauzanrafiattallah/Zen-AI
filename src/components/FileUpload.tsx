@@ -304,8 +304,7 @@ const FileUpload = (props: PropTypes) => {
           >
             {isLoading ? (
               <>
-                <Loader2Icon className="size-4 animate-spin mr-2" />
-                Processing...
+                <Loader2Icon className="size-4 animate-spin " />
               </>
             ) : (
               "Submit"
